@@ -1,4 +1,4 @@
-# NebulaStudio
+# Resonix
 
 JUCE-based standalone music app scaffold with:
 
