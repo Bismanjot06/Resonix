@@ -1,0 +1,33 @@
+# Generated build output
+build/
+Build/
+Builds/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+compile_commands.json
+cmake_install.cmake
+Makefile
+
+# JUCE generated files
+JuceLibraryCode/
+*/JuceLibraryCode/
+
+# IDE and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Native build artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
