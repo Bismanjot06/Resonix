@@ -1,5 +1,4 @@
 #include <JuceHeader.h>
-#include <fstream>
 
 #include "UI/MainComponent.h"
 
@@ -30,11 +29,11 @@ public:
     }
 
 private:
-    class MainWindow : public juce::AudioAppComponent,
+    class MainContent : public juce::AudioAppComponent,
                         private juce::Timer
     {
     public:
-        explicit MainWindow(const juce::String& name)
+        explicit MainContent(const juce::String& name)
             : juce::AudioAppComponent()
         {
             setName(name);
@@ -47,11 +46,6 @@ private:
             setVisible(true);
             
             startTimerHz(30);
-            
-            try { std::ofstream dbg("/tmp/resonix_mainwindow_ctor.txt"); dbg << "MainWindow created, size=" << getWidth() << "x" << getHeight() << "\n"; dbg.close(); } catch(...) {}
-            
-            // This is a fallback test: write a simple status file to confirm the ctor ran
-            try { std::ofstream dbg("/tmp/resonix_ctor_success.txt"); dbg << "Constructor completed successfully\n"; dbg.close(); } catch(...) {}
             
             addMainContent();
         }
@@ -68,7 +62,7 @@ private:
             g.fillAll(juce::Colour(0xff333333));
         }
 
-        ~MainWindow() override
+        ~MainContent() override
         {
             setLookAndFeel(nullptr);
             shutdownAudio();
@@ -109,6 +103,27 @@ private:
 
         DarkLAF darkLAF;
         std::unique_ptr<nebula::ui::MainComponent> content;
+    };
+
+    class MainWindow : public juce::DocumentWindow
+    {
+    public:
+        explicit MainWindow(const juce::String& name)
+            : juce::DocumentWindow(name,
+                                   juce::Colour(0xff1a1a1a),
+                                   juce::DocumentWindow::allButtons)
+        {
+            setUsingNativeTitleBar(true);
+            setResizable(true, true);
+            setContentOwned(new MainContent(name), true);
+            centreWithSize(1240, 760);
+            setVisible(true);
+        }
+
+        void closeButtonPressed() override
+        {
+            juce::JUCEApplication::getInstance()->systemRequestedQuit();
+        }
     };
 
     std::unique_ptr<MainWindow> mainWindow;

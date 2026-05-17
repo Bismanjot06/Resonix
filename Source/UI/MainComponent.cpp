@@ -1,7 +1,6 @@
 #include "MainComponent.h"
 
 #include "../Utils/Helpers.h"
-#include <fstream>
 
 namespace nebula::ui
 {
@@ -111,21 +110,6 @@ MainComponent::MainComponent()
     // Ensure all controls get valid bounds before the first frame.
     resized();
 
-    // Dump runtime bounds to a file for debugging (helps diagnose blank UI)
-    try
-    {
-        std::ofstream dbg("/tmp/resonix_ui_debug.txt");
-        dbg << "MainComponent constructed\n";
-        dbg << "size=" << getWidth() << "x" << getHeight() << "\n";
-        dbg << "titleLabel bounds=" << titleLabel.getBounds().toString().toStdString() << "\n";
-        dbg << "pads_count=" << pads.size() << "\n";
-        for (int i = 0; i < pads.size(); ++i)
-            dbg << "pad_" << i << " bounds=" << pads[i]->getBounds().toString().toStdString() << " visible=" << pads[i]->isShowing() << "\n";
-        dbg << "timeline bounds=" << timeline.getBounds().toString().toStdString() << "\n";
-        dbg.close();
-    }
-    catch (...) {}
-
     initAudioEngine();
     startTimerHz(30);
     DBG("MainComponent: constructor complete");
@@ -150,22 +134,6 @@ void MainComponent::initAudioEngine()
 void MainComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colour(0xff333333));
-
-    // Temporary debug overlay to ensure paint is executing and visible
-    try
-    {
-        std::ofstream dbg("/tmp/resonix_paint_debug.txt");
-        dbg << "paint called\n";
-        dbg << "size=" << getWidth() << "x" << getHeight() << "\n";
-        dbg.close();
-    }
-    catch (...) {}
-
-    g.setColour(juce::Colours::red);
-    g.fillRect(8, 8, 120, 40);
-    g.setColour(juce::Colours::white);
-    g.setFont(18.0f);
-    g.drawSingleLineText("Resonix", 14, 36);
 }
 
 void MainComponent::resized()
